@@ -4,11 +4,16 @@ import (
 	"flag"
 	"log"
 
-	"github.com/Kwynto/read-adviser-bot/clients/telegram"
+	tgClient "github.com/Kwynto/read-adviser-bot/clients/telegram"
+	event_consumer "github.com/Kwynto/read-adviser-bot/consumer/event-consumer"
+	"github.com/Kwynto/read-adviser-bot/events/telegram"
+	"github.com/Kwynto/read-adviser-bot/storage/files"
 )
 
 const (
-	tgBotHost = "api.telegram.org"
+	tgBotHost   = "api.telegram.org"
+	storagePath = "storage"
+	batchSize   = 100
 )
 
 func mustToken() string {
@@ -25,9 +30,15 @@ func mustToken() string {
 }
 
 func main() {
-	tgClient := telegram.New(tgBotHost, mustToken())
-	// fetcher := fetcher.New(tgClient)
-	// processor := processor.New(tgClient)
+	eventsProcessor := telegram.New(
+		tgClient.New(tgBotHost, mustToken()),
+		files.New(storagePath),
+	)
 
-	// consumer.Start(fetcher, processor)
+	log.Print("service started")
+
+	consumer := event_consumer.New(eventsProcessor, eventsProcessor, batchSize)
+	if err := consumer.Start(); err != nil {
+		log.Fatal("service is stopped", err)
+	}
 }
