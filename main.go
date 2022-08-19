@@ -12,9 +12,11 @@ import (
 
 const (
 	tgBotHost   = "api.telegram.org"
-	storagePath = "storage"
+	storagePath = "files_storage"
 	batchSize   = 100
 )
+
+// 5621526217:AAFgjs9XsEw8zOYvHo-IuuEC1bkc20btQmE
 
 func mustToken() string {
 	token := flag.String(

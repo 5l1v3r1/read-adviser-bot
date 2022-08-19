@@ -1,11 +1,9 @@
 package storage
 
 import (
-	"crypto/sha1"
+	"crypto/rand"
 	"errors"
-	"io"
-
-	"github.com/Kwynto/read-adviser-bot/lib/e"
+	"fmt"
 )
 
 type Storage interface {
@@ -23,15 +21,22 @@ type Page struct {
 }
 
 func (p Page) Hash() (string, error) {
-	h := sha1.New()
+	// h := sha1.New()
 
-	if _, err := io.WriteString(h, p.URL); err != nil {
-		return "", e.Wrap("can't calculated hash", err)
-	}
+	// if _, err := io.WriteString(h, p.URL); err != nil {
+	// 	return "", e.Wrap("can't calculated hash", err)
+	// }
 
-	if _, err := io.WriteString(h, p.UserName); err != nil {
-		return "", e.Wrap("can't calculated hash", err)
-	}
+	// if _, err := io.WriteString(h, p.UserName); err != nil {
+	// 	return "", e.Wrap("can't calculated hash", err)
+	// }
 
-	return string(h.Sum(nil)), nil
+	// return string(h.Sum(nil)), nil
+	return GenerateId(), nil
+}
+
+func GenerateId() string {
+	b := make([]byte, 32)
+	rand.Read(b)
+	return fmt.Sprintf("%x", b)
 }
