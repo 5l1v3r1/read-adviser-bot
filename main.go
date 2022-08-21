@@ -18,7 +18,7 @@ const (
 	batchSize          = 100
 )
 
-// token:
+// token: 5752522584:AAHEgAM5kWGhxfFe3DznhzyM6VQa55--97k
 
 func mustToken() string {
 	token := flag.String(
